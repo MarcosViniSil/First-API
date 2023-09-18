@@ -1,4 +1,4 @@
-package br.com.primeirapi.primeiraAPI;
+package br.com.primeirapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
