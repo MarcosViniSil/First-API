@@ -5,10 +5,10 @@ import br.com.primeirapi.model.User;
 import br.com.primeirapi.repository.ProductRepository;
 import br.com.primeirapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -18,13 +18,43 @@ public class UserController {
     private ProductRepository productRepository;
 
     @PostMapping("/users")
-    public void saveUser(@RequestBody User user){
-        User savedUser=userRepository.save(user);
-        for(Product prod:user.getProducts()){
+    public void saveUser(@RequestBody User user) {
+        User savedUser = userRepository.save(user);
+        for (Product prod : user.getProducts()) {
             prod.setUser(savedUser);
             productRepository.save(prod);
         }
 
     }
 
-}
+    @GetMapping("/users")
+    public List<User> findUsers() {
+        return userRepository.findAll();
+    }
+
+    @GetMapping("/users/{id}")
+    public Optional<User> findUser(@PathVariable("id") Integer id) {
+        return userRepository.findById(id);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleterUser(@PathVariable("id") Integer id) {
+        userRepository.deleteById(id);
+    }
+
+    @PutMapping("/users")
+    public void putUser(@RequestBody User user) {
+        Optional<User> existingUser = userRepository.findById(user.getId());
+        if (existingUser.isPresent()) {
+
+            User savedUser = userRepository.save(user);
+
+            for (Product prod : user.getProducts()) {
+                prod.setUser(savedUser);
+                productRepository.save(prod);
+            }
+
+        }
+
+    }
+    }

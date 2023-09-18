@@ -1,5 +1,6 @@
 package br.com.primeirapi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +17,7 @@ public class Product {
     private String name;
 
     @ManyToOne
+    @JsonBackReference
     private User user;
 
     public Product() {
