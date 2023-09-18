@@ -1,5 +1,6 @@
 package br.com.primeirapi.controller;
 
+import br.com.primeirapi.handler.AppilcationException;
 import br.com.primeirapi.model.Product;
 import br.com.primeirapi.model.User;
 import br.com.primeirapi.repository.ProductRepository;
@@ -19,6 +20,9 @@ public class UserController {
 
     @PostMapping("/users")
     public void saveUser(@RequestBody User user) {
+        if(user.getName()==null||user.getEmail()==null){
+            throw new AppilcationException("usuario ou produto nulo");
+        }
         User savedUser = userRepository.save(user);
         for (Product prod : user.getProducts()) {
             prod.setUser(savedUser);
@@ -44,6 +48,9 @@ public class UserController {
 
     @PutMapping("/users")
     public void putUser(@RequestBody User user) {
+        if(user.getName()==null||user.getEmail()==null){
+            throw new AppilcationException("usuario ou produto nulo");
+        }
         Optional<User> existingUser = userRepository.findById(user.getId());
         if (existingUser.isPresent()) {
 
